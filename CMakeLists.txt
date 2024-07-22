@@ -16,10 +16,17 @@ set(PLAYDATE_GAME_DEVICE slots_DEVICE)
 
 project(${PLAYDATE_GAME_NAME} C ASM)
 
+set(SOURCES
+    source/main.c
+    source/game.c
+    source/inventory.c
+    source/slots.c
+)
+
 if (TOOLCHAIN STREQUAL "armgcc")
-	add_executable(${PLAYDATE_GAME_DEVICE} source/main.c source/game.c)
+    add_executable(${PLAYDATE_GAME_DEVICE} ${SOURCES})
 else()
-	add_library(${PLAYDATE_GAME_NAME} SHARED source/main.c source/game.c)
+    add_library(${PLAYDATE_GAME_NAME} SHARED ${SOURCES})
 endif()
 
 include(${SDK}/C_API/buildsupport/playdate_game.cmake)
