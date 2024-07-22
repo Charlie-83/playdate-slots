@@ -1,0 +1,3 @@
+If:
+  PathMatch: (vendor/.*)|(/usr.*)
+# Suppress: '*'

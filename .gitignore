@@ -1,0 +1,4 @@
+.cache
+Source/*.so
+build
+*.pdx

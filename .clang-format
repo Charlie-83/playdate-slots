@@ -1,0 +1,4 @@
+BreakBeforeBraces: Attach
+IndentWidth: 2
+ColumnLimit: 100
+SortIncludes: true
