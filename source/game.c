@@ -45,11 +45,24 @@ void setup(PlaydateAPI *pd) {
   LCDBitmap *skull_image = pd->graphics->loadBitmap("skull.png", &err);
   if (skull_image == NULL)
     pd->system->error(err);
-  state->images[skull] = skull_image;
+  state->slot_images[skull] = skull_image;
+  skull_image = pd->graphics->loadBitmap("small_skull.png", &err);
+  if (skull_image == NULL)
+    pd->system->error(err);
+  state->small_slot_images[skull] = skull_image;
   LCDBitmap *bone_image = pd->graphics->loadBitmap("bone.png", &err);
   if (bone_image == NULL)
     pd->system->error(err);
-  state->images[bone] = bone_image;
+  state->slot_images[bone] = bone_image;
+  bone_image = pd->graphics->loadBitmap("small_bone.png", &err);
+  if (bone_image == NULL)
+    pd->system->error(err);
+  state->small_slot_images[bone] = bone_image;
+
+  LCDBitmap *skeleton_image = pd->graphics->loadBitmap("skeleton.png", &err);
+  if (skeleton_image == NULL)
+    pd->system->error(err);
+  state->unit_images[skeleton] = skeleton_image;
 
   for (int i = 0; i < 3; ++i) {
     for (int j = 0; j < 3; ++j) {
@@ -60,6 +73,7 @@ void setup(PlaydateAPI *pd) {
       pd->sprite->addSprite(sprite);
     }
   }
+  SetupInventory(state);
   pd->system->resetElapsedTime();
 }
 
@@ -74,7 +88,7 @@ int update(void *userdata) {
   if (state->scene == slots) {
     UpdateSlots(state, time);
   } else if (state->scene == inventory) {
-    UpdateInventory(state);
+    UpdateInventory(state, time);
   }
   pd->system->resetElapsedTime();
   return 1;

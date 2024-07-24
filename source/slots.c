@@ -87,6 +87,6 @@ void UpdateSlots(State *state, float time) {
 void assignSprite(State *state, LCDSprite *sprite) {
   int sprite_number = (int)((float)rand() / RAND_MAX * NUMBER_OF_SLOT_SPRITES);
   PlaydateAPI *pd = state->pd;
-  pd->sprite->setImage(sprite, state->images[sprite_number], kBitmapUnflipped);
+  pd->sprite->setImage(sprite, state->slot_images[sprite_number], kBitmapUnflipped);
   pd->sprite->setTag(sprite, sprite_number);
 }

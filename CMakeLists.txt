@@ -21,6 +21,7 @@ set(SOURCES
     source/game.c
     source/inventory.c
     source/slots.c
+    source/utils.c
 )
 
 if (TOOLCHAIN STREQUAL "armgcc")
