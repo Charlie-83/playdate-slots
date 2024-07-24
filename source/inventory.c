@@ -5,17 +5,19 @@
 #include <pd_api.h>
 #include <stdio.h>
 
-static unsigned int costs[NUMBER_OF_UNITS][NUMBER_OF_SLOT_SPRITES] = {{1, 5}, {3, 3}};
+static unsigned int costs[NUMBER_OF_UNITS][NUMBER_OF_ITEMS] = {{1, 5}, {3, 3}};
+static void Buy(State *state);
 
 void SetupInventory(State *state) {
   state->inventory_state.selected = 0;
   state->inventory_state.flashing_progress = 0;
+  for (int i = 0; i < NUMBER_OF_UNITS; ++i) state->army_state.army[i] = 0;
 }
 
 void ShowInventory(State *state) {
   PlaydateAPI *pd = state->pd;
   pd->sprite->removeAllSprites();
-  for (int i = 0; i < NUMBER_OF_SLOT_SPRITES; ++i) {
+  for (int i = 0; i < NUMBER_OF_ITEMS; ++i) {
     LCDSprite *sprite = pd->sprite->newSprite();
     // TODO: Memory leak because these are never freed
     pd->sprite->setImage(sprite, state->slot_images[i], kBitmapUnflipped);
@@ -39,6 +41,10 @@ void UpdateInventory(State *state, float time) {
     state->scene = slots;
   }
 
+  if (pushed & kButtonA) {
+    Buy(state);
+  }
+
   if (pushed & kButtonDown && state->inventory_state.selected < NUMBER_OF_UNITS - 1)
     ++(state->inventory_state.selected);
   if (pushed & kButtonUp && state->inventory_state.selected > 0)
@@ -48,13 +54,15 @@ void UpdateInventory(State *state, float time) {
   pd->sprite->drawSprites();
 
   char str[6];
-  for (int i = 0; i < NUMBER_OF_SLOT_SPRITES; ++i) {
-    sprintf(str, "%d", state->inventory[i]);
+  for (int i = 0; i < NUMBER_OF_ITEMS; ++i) {
+    sprintf(str, "%d", state->inventory_state.inventory[i]);
     pd->graphics->drawText(str, strlen(str), kASCIIEncoding, SPRITE_SIZE * i, 0);
   }
 
   for (int i = 0; i < NUMBER_OF_UNITS; ++i) {
-    for (int j = 0; j < NUMBER_OF_SLOT_SPRITES; ++j) {
+    sprintf(str, "%d", state->army_state.army[i]);
+    pd->graphics->drawText(str, strlen(str), kASCIIEncoding, SCREEN_X - 10, SPRITE_SIZE * i);
+    for (int j = 0; j < NUMBER_OF_ITEMS; ++j) {
       pd->graphics->drawBitmap(state->small_slot_images[j],
                                SCREEN_X - SPRITE_SIZE - SMALL_SPRITE_SIZE,
                                SPRITE_SIZE * i + SMALL_SPRITE_SIZE * j + 2, kBitmapUnflipped);
@@ -74,4 +82,15 @@ void UpdateInventory(State *state, float time) {
   drawRectWidth(pd, SCREEN_X - SPRITE_SIZE - SMALL_SPRITE_SIZE - 20,
                 state->inventory_state.selected * SPRITE_SIZE, SPRITE_SIZE + SMALL_SPRITE_SIZE + 20,
                 SPRITE_SIZE, width, kColorBlack);
+}
+
+static void Buy(State *state) {
+  for (int i = 0; i < NUMBER_OF_ITEMS; ++i) {
+    if (state->inventory_state.inventory[i] < costs[state->inventory_state.selected][i])
+      return;
+  }
+  for (int i = 0; i < NUMBER_OF_ITEMS; ++i) {
+    state->inventory_state.inventory[i] -= costs[state->inventory_state.selected][i];
+  }
+  ++(state->army_state.army[state->inventory_state.selected]);
 }

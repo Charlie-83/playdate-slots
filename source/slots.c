@@ -19,9 +19,9 @@ void UpdateSlots(State *state, float time) {
     ShowInventory(state);
     state->scene = inventory;
   }
-  if (pushed & kButtonA)
+  if (pushed & kButtonA && state->roller_state == spinning)
     state->roller_state = slowing;
-  if ((pushed & kButtonB) && state->mana >= state->pull_cost) {
+  if ((pushed & kButtonB) && state->mana >= state->pull_cost && state->roller_state == stopped) {
     state->mana -= state->pull_cost;
     state->roller_state = spinning;
     state->roller_speed = 1000;
@@ -43,7 +43,7 @@ void UpdateSlots(State *state, float time) {
       state->roller_state = stopped;
       for (int i = 0; i < 3; ++i) {
         SlotItems sprite_tag = pd->sprite->getTag(state->rollers[i][state->current_row]);
-        ++(state->inventory[sprite_tag]);
+        ++(state->inventory_state.inventory[sprite_tag]);
       }
     } else
       move_y = -offset * time * 3;
@@ -85,7 +85,7 @@ void UpdateSlots(State *state, float time) {
 }
 
 void assignSprite(State *state, LCDSprite *sprite) {
-  int sprite_number = (int)((float)rand() / RAND_MAX * NUMBER_OF_SLOT_SPRITES);
+  int sprite_number = (int)((float)rand() / RAND_MAX * NUMBER_OF_ITEMS);
   PlaydateAPI *pd = state->pd;
   pd->sprite->setImage(sprite, state->slot_images[sprite_number], kBitmapUnflipped);
   pd->sprite->setTag(sprite, sprite_number);

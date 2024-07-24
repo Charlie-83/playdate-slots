@@ -27,8 +27,8 @@ void setup(PlaydateAPI *pd) {
   state->mana_regen = 1;
   state->pull_cost = 10;
   state->scene = slots;
-  for (int i = 0; i < NUMBER_OF_SLOT_SPRITES; ++i)
-    state->inventory[i] = 0;
+  for (int i = 0; i < NUMBER_OF_ITEMS; ++i)
+    state->inventory_state.inventory[i] = 0;
 
   pd->system->setUpdateCallback(update, state);
   LCDBitmap *machine_image = pd->graphics->loadBitmap("machine.png", &err);

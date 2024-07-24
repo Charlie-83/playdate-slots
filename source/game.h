@@ -9,7 +9,7 @@
 #define SCREEN_Y 240
 
 typedef LCDSprite *Roller[3];
-#define NUMBER_OF_SLOT_SPRITES 2
+#define NUMBER_OF_ITEMS 2
 typedef enum SlotItems {
   skull,
   bone,
@@ -33,17 +33,22 @@ typedef enum Units {
   ghoul,
 } Units;
 
-typedef unsigned int Inventory[NUMBER_OF_SLOT_SPRITES];
+typedef unsigned int Inventory[NUMBER_OF_ITEMS];
 typedef struct InventoryState {
+    Inventory inventory;
   unsigned int selected;
   float flashing_progress;
 } InventoryState;
+typedef unsigned int Army[NUMBER_OF_UNITS];
+typedef struct ArmyState {
+    Army army;
+} ArmyState;
 
 typedef struct State {
   PlaydateAPI *pd;
   Roller rollers[3];
-  LCDBitmap *slot_images[NUMBER_OF_SLOT_SPRITES];
-  LCDBitmap *small_slot_images[NUMBER_OF_SLOT_SPRITES];
+  LCDBitmap *slot_images[NUMBER_OF_ITEMS];
+  LCDBitmap *small_slot_images[NUMBER_OF_ITEMS];
   LCDBitmap *unit_images[NUMBER_OF_UNITS];
   float roller_speed;
   RollerState roller_state;
@@ -52,10 +57,10 @@ typedef struct State {
   float mana;
   float mana_regen;
   unsigned int pull_cost;
-  Inventory inventory;
   LCDSprite *sprites[3];
   Scene scene;
   InventoryState inventory_state;
+  ArmyState army_state;
 } State;
 
 void setup(PlaydateAPI *pd);
