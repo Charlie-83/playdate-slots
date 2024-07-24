@@ -27,15 +27,16 @@ typedef enum Scene {
   slots,
   inventory,
 } Scene;
-#define NUMBER_OF_UNITS 1
+#define NUMBER_OF_UNITS 2
 typedef enum Units {
-    skeleton
+  skeleton,
+  ghoul,
 } Units;
 
 typedef unsigned int Inventory[NUMBER_OF_SLOT_SPRITES];
 typedef struct InventoryState {
-    unsigned int selected;
-    float flashing_progress;
+  unsigned int selected;
+  float flashing_progress;
 } InventoryState;
 
 typedef struct State {

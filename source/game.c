@@ -63,6 +63,10 @@ void setup(PlaydateAPI *pd) {
   if (skeleton_image == NULL)
     pd->system->error(err);
   state->unit_images[skeleton] = skeleton_image;
+  LCDBitmap *ghoul_image = pd->graphics->loadBitmap("ghoul.png", &err);
+  if (ghoul_image == NULL)
+    pd->system->error(err);
+  state->unit_images[ghoul] = ghoul_image;
 
   for (int i = 0; i < 3; ++i) {
     for (int j = 0; j < 3; ++j) {

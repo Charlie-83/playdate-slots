@@ -5,7 +5,7 @@
 #include <pd_api.h>
 #include <stdio.h>
 
-static unsigned int costs[NUMBER_OF_UNITS][NUMBER_OF_SLOT_SPRITES] = {{1, 5}};
+static unsigned int costs[NUMBER_OF_UNITS][NUMBER_OF_SLOT_SPRITES] = {{1, 5}, {3, 3}};
 
 void SetupInventory(State *state) {
   state->inventory_state.selected = 0;
@@ -25,7 +25,7 @@ void ShowInventory(State *state) {
   for (int i = 0; i < NUMBER_OF_UNITS; ++i) {
     LCDSprite *sprite = pd->sprite->newSprite();
     pd->sprite->setImage(sprite, state->unit_images[i], kBitmapUnflipped);
-    pd->sprite->moveTo(sprite, SCREEN_X - SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f);
+    pd->sprite->moveTo(sprite, SCREEN_X - SPRITE_SIZE / 2.0f, SPRITE_SIZE / 2.0f + i * SPRITE_SIZE);
     pd->sprite->addSprite(sprite);
   }
 }
@@ -34,10 +34,16 @@ void UpdateInventory(State *state, float time) {
   PlaydateAPI *pd = state->pd;
   PDButtons current, pushed, released;
   pd->system->getButtonState(&current, &pushed, &released);
-  if (pushed & kButtonRight) {
+  if (pushed & kButtonB) {
     ShowSlots(state);
     state->scene = slots;
   }
+
+  if (pushed & kButtonDown && state->inventory_state.selected < NUMBER_OF_UNITS - 1)
+    ++(state->inventory_state.selected);
+  if (pushed & kButtonUp && state->inventory_state.selected > 0)
+    --(state->inventory_state.selected);
+
   pd->graphics->clear(kColorWhite);
   pd->sprite->drawSprites();
 
