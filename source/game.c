@@ -1,4 +1,5 @@
 #include "game.h"
+#include "battle.h"
 #include "inventory.h"
 #include "pd_api.h"
 #include "slots.h"
@@ -78,6 +79,7 @@ void setup(PlaydateAPI *pd) {
     }
   }
   SetupInventory(state);
+  SetupBattle(state);
   pd->system->resetElapsedTime();
 }
 
@@ -89,11 +91,13 @@ int update(void *userdata) {
   // Update mana
   state->mana += time * state->mana_regen;
 
-  if (state->scene == slots) {
+  if (state->scene == slots)
     UpdateSlots(state, time);
-  } else if (state->scene == inventory) {
+  else if (state->scene == inventory)
     UpdateInventory(state, time);
-  }
+  else if (state->scene == battle)
+    UpdateBattle(state, time);
+
   pd->system->resetElapsedTime();
   return 1;
 }

@@ -11,10 +11,12 @@ static void Buy(State *state);
 void SetupInventory(State *state) {
   state->inventory_state.selected = 0;
   state->inventory_state.flashing_progress = 0;
-  for (int i = 0; i < NUMBER_OF_UNITS; ++i) state->army_state.army[i] = 0;
+  for (int i = 0; i < NUMBER_OF_UNITS; ++i)
+    state->army_state.army[i] = 0;
 }
 
 void ShowInventory(State *state) {
+  state->scene = inventory;
   PlaydateAPI *pd = state->pd;
   pd->sprite->removeAllSprites();
   for (int i = 0; i < NUMBER_OF_ITEMS; ++i) {

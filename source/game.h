@@ -1,5 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 #include <pd_api.h>
 
 #define SPRITE_SIZE 80
@@ -26,6 +25,7 @@ typedef enum Sprites {
 typedef enum Scene {
   slots,
   inventory,
+  battle,
 } Scene;
 #define NUMBER_OF_UNITS 2
 typedef enum Units {
@@ -35,14 +35,20 @@ typedef enum Units {
 
 typedef unsigned int Inventory[NUMBER_OF_ITEMS];
 typedef struct InventoryState {
-    Inventory inventory;
+  Inventory inventory;
   unsigned int selected;
   float flashing_progress;
 } InventoryState;
 typedef unsigned int Army[NUMBER_OF_UNITS];
 typedef struct ArmyState {
-    Army army;
+  Army army;
 } ArmyState;
+
+typedef struct BattleState {
+  unsigned int next_battle;
+  int (*battles)[NUMBER_OF_UNITS];
+  int total_battles;
+} BattleState;
 
 typedef struct State {
   PlaydateAPI *pd;
@@ -61,8 +67,8 @@ typedef struct State {
   Scene scene;
   InventoryState inventory_state;
   ArmyState army_state;
+  BattleState battle_state;
 } State;
 
 void setup(PlaydateAPI *pd);
 int update(void *userdata);
-#endif

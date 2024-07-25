@@ -1,4 +1,5 @@
 #include "slots.h"
+#include "battle.h"
 #include "inventory.h"
 #include <stdio.h>
 
@@ -15,10 +16,11 @@ void UpdateSlots(State *state, float time) {
   PlaydateAPI *pd = state->pd;
   PDButtons current, pushed, released;
   pd->system->getButtonState(&current, &pushed, &released);
-  if (pushed & kButtonLeft) {
+  if (pushed & kButtonLeft)
     ShowInventory(state);
-    state->scene = inventory;
-  }
+  else if (pushed & kButtonRight)
+    ShowBattle(state);
+
   if (pushed & kButtonA && state->roller_state == spinning)
     state->roller_state = slowing;
   if ((pushed & kButtonB) && state->mana >= state->pull_cost && state->roller_state == stopped) {
