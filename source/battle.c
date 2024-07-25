@@ -1,7 +1,10 @@
 #include "battle.h"
 #include "game.h"
+#include "slots.h"
 #include "utils.h"
 #include <cJSON.h>
+
+static void SetEnemySprites(State *state);
 
 void SetupBattle(State *state) {
   PlaydateAPI *pd = state->pd;
@@ -28,14 +31,44 @@ void SetupBattle(State *state) {
     }
     ++i;
   }
+  for (int i = 0; i < 5; ++i) {
+    LCDSprite *sprite = pd->sprite->newSprite();
+    state->battle_state.sprites[i] = sprite;
+    pd->sprite->moveTo(sprite, (i + 0.5f) * SPRITE_SIZE, SPRITE_SIZE / 2.0f);
+  }
+  SetEnemySprites(state);
 }
 
 void ShowBattle(State *state) {
   state->scene = battle;
   PlaydateAPI *pd = state->pd;
   pd->sprite->removeAllSprites();
+  pd->graphics->clear(kColorWhite);
+  for (int i = 0; i < 5; ++i)
+    pd->sprite->addSprite(state->battle_state.sprites[i]);
 }
 
 void UpdateBattle(State *state, float time) {
+  PlaydateAPI *pd = state->pd;
+  pd->sprite->drawSprites();
 
+  PDButtons current, pushed, released;
+  pd->system->getButtonState(&current, &pushed, &released);
+  if (pushed & kButtonB)
+    ShowSlots(state);
+  else if (pushed & kButtonA &&
+           state->battle_state.next_battle < state->battle_state.total_battles - 1) {
+    ++(state->battle_state.next_battle);
+    SetEnemySprites(state);
+  }
+}
+
+static void SetEnemySprites(State *state) {
+  PlaydateAPI *pd = state->pd;
+  int *battle = state->battle_state.battles[state->battle_state.next_battle];
+  int current = 0;
+  for (int i = 0; i < NUMBER_OF_UNITS; ++i)
+    for (int j = 0; j < battle[i]; ++j)
+      pd->sprite->setImage(state->battle_state.sprites[current++], state->unit_images[i],
+                           kBitmapUnflipped);
 }

@@ -48,6 +48,7 @@ typedef struct BattleState {
   unsigned int next_battle;
   int (*battles)[NUMBER_OF_UNITS];
   int total_battles;
+  LCDSprite *sprites[SCREEN_X / SPRITE_SIZE];
 } BattleState;
 
 typedef struct State {

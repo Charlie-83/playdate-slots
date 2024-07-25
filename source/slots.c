@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 void ShowSlots(State *state) {
+  state->scene = slots;
   PlaydateAPI *pd = state->pd;
   pd->sprite->removeAllSprites();
   pd->sprite->addSprite(state->sprites[machine]);
