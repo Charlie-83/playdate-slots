@@ -29,3 +29,9 @@ Units strToUnit(const char *str) {
   return -1;
 }
 
+int pulsingWidth(State *state, float time) {
+  state->flashing_progress += time * 8;
+  if (state->flashing_progress > 2 * (float)M_PI)
+    state->flashing_progress -= 2 * (float)M_PI;
+  return (int)(sinf(state->flashing_progress) * 1.5f + 3);
+}

@@ -28,6 +28,7 @@ void setup(PlaydateAPI *pd) {
   state->mana_regen = 1;
   state->pull_cost = 10;
   state->scene = slots;
+  state->flashing_progress = 0;
   for (int i = 0; i < NUMBER_OF_ITEMS; ++i)
     state->inventory_state.inventory[i] = 0;
 

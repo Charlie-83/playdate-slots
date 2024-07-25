@@ -10,7 +10,6 @@ static void Buy(State *state);
 
 void SetupInventory(State *state) {
   state->inventory_state.selected = 0;
-  state->inventory_state.flashing_progress = 0;
   for (int i = 0; i < NUMBER_OF_UNITS; ++i)
     state->army_state.army[i] = 0;
 }
@@ -77,10 +76,7 @@ void UpdateInventory(State *state, float time) {
 
   pd->graphics->drawLine(SPRITE_SIZE * 2, 0, SPRITE_SIZE * 2, SCREEN_Y, 2, kColorBlack);
   // TODO: Rect not visible
-  state->inventory_state.flashing_progress += time * 8;
-  if (state->inventory_state.flashing_progress > 2 * (float)M_PI)
-    state->inventory_state.flashing_progress -= 2 * (float)M_PI;
-  int width = (int)(sinf(state->inventory_state.flashing_progress) * 1.5f + 3);
+  int width = pulsingWidth(state, time);
   drawRectWidth(pd, SCREEN_X - SPRITE_SIZE - SMALL_SPRITE_SIZE - 20,
                 state->inventory_state.selected * SPRITE_SIZE, SPRITE_SIZE + SMALL_SPRITE_SIZE + 20,
                 SPRITE_SIZE, width, kColorBlack);

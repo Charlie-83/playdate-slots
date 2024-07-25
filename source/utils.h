@@ -8,3 +8,5 @@ void drawRectWidth(PlaydateAPI *pd, int x, int y, int width, int height, int lin
 const char* readFile(PlaydateAPI *pd, const char* path);
 
 Units strToUnit(const char *str);
+
+int pulsingWidth(State *state, float time);

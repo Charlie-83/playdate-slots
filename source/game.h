@@ -37,7 +37,6 @@ typedef unsigned int Inventory[NUMBER_OF_ITEMS];
 typedef struct InventoryState {
   Inventory inventory;
   unsigned int selected;
-  float flashing_progress;
 } InventoryState;
 typedef unsigned int Army[NUMBER_OF_UNITS];
 typedef struct ArmyState {
@@ -48,12 +47,15 @@ typedef struct BattleState {
   unsigned int next_battle;
   int (*battles)[NUMBER_OF_UNITS];
   int total_battles;
-  LCDSprite *sprites[SCREEN_X / SPRITE_SIZE];
+  LCDSprite *sprites[2][5];
+  Units selected_units[5];
+  unsigned int currently_selected;
 } BattleState;
 
 typedef struct State {
   PlaydateAPI *pd;
   Roller rollers[3];
+  float flashing_progress;
   LCDBitmap *slot_images[NUMBER_OF_ITEMS];
   LCDBitmap *small_slot_images[NUMBER_OF_ITEMS];
   LCDBitmap *unit_images[NUMBER_OF_UNITS];
